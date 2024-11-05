@@ -3,12 +3,21 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
+import { 
+  motion, 
+  useScroll, 
+  useTransform, 
+  useSpring, 
+  useMotionValue, // Add this
+  useVelocity,    // And this, if not already imported
+  useAnimationFrame, // And this, if not already imported
+  wrap 
+} from 'framer-motion';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CalendarIcon, MessageCircleIcon, PhoneIcon, ShieldCheckIcon, UserIcon, VideoIcon, MenuIcon, XIcon, CheckCircleIcon, StarIcon, SearchIcon, HeartPulseIcon, BrainIcon, EyeIcon, LungsIcon } from 'lucide-react'
+import { MessageCircleIcon,  UserIcon, VideoIcon, MenuIcon, XIcon,  StarIcon, SearchIcon, HeartPulseIcon, BrainIcon, EyeIcon, LungsIcon } from 'lucide-react'
 
 const MotionLink = motion(Link)
 
@@ -109,9 +118,9 @@ export default function LandingPage() {
                 ease: "linear",
               }}
             >
-              <Image src="/placeholder.svg" alt="TeleMed Logo" layout="fill" className="rounded-full" />
+              <Image src="/placeholder.svg" alt="MediCare Logo" layout="fill" className="rounded-full" />
             </motion.div>
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">TeleMed</span>
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">MediCare</span>
           </Link>
           <nav className="hidden md:flex space-x-6">
             {navItems.map((item) => (
@@ -196,7 +205,7 @@ export default function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
                 >
-                  Experience cutting-edge telemedicine with TeleMed. Connect with top-rated specialists anytime, anywhere.
+                  Experience cutting-edge MediCareicine with MediCare. Connect with top-rated specialists anytime, anywhere.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -231,7 +240,7 @@ export default function LandingPage() {
                 />
                 <Image
                   src="/placeholder.svg?height=500&width=500"
-                  alt="Telemedicine Illustration"
+                  alt="MediCareicine Illustration"
                   width={500}
                   height={500}
                   className="rounded-lg shadow-2xl relative z-10"
@@ -366,9 +375,9 @@ export default function LandingPage() {
             <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">What Our Patients Say</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: "Sarah L.", quote: "TeleMed has been a lifesaver. I got expert medical advice without leaving my home!", rating: 5 },
+                { name: "Sarah L.", quote: "MediCare has been a lifesaver. I got expert medical advice without leaving my home!", rating: 5 },
                 { name: "John D.", quote: "The doctors are incredibly knowledgeable and caring. Best healthcare experience ever!", rating: 5 },
-                { name: "Emma W.", quote: "Quick, efficient, and professional. TeleMed is the future of healthcare.", rating: 4 },
+                { name: "Emma W.", quote: "Quick, efficient, and professional. MediCare is the future of healthcare.", rating: 4 },
               ].map((testimonial, index) => (
                 <motion.div
                   key={index}
@@ -417,8 +426,8 @@ export default function LandingPage() {
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       {[
-                        { q: "What is TeleMed?", a: "TeleMed is a cutting-edge telemedicine platform that connects patients with licensed healthcare providers for virtual consultations, offering a wide range of medical services remotely." },
-                        { q: "Is TeleMed available 24/7?", a: "Yes, TeleMed offers round-the-clock access to healthcare professionals for urgent care needs. For specialized services, availability may vary based on the doctor's schedule." },
+                        { q: "What is MediCare?", a: "MediCare is a cutting-edge MediCareicine platform that connects patients with licensed healthcare providers for virtual consultations, offering a wide range of medical services remotely." },
+                        { q: "Is MediCare available 24/7?", a: "Yes, MediCare offers round-the-clock access to healthcare professionals for urgent care needs. For specialized services, availability may vary based on the doctor's schedule." },
                       ].map((item, index) => (
                         <div key={index}>
                           <h3 className="font-semibold mb-2">{item.q}</h3>
@@ -451,8 +460,8 @@ export default function LandingPage() {
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       {[
-                        { q: "How much does a TeleMed consultation cost?", a: "The cost varies depending on the type of consultation and your insurance coverage. We offer competitive rates for both insured and self-pay patients. You'll always know the cost upfront before your appointment." },
-                        { q: "Does TeleMed accept insurance?", a: "Yes, TeleMed accepts many major insurance plans. We also offer affordable self-pay options for those without insurance coverage. Check our website or contact our support team for a list of accepted insurance providers." },
+                        { q: "How much does a MediCare consultation cost?", a: "The cost varies depending on the type of consultation and your insurance coverage. We offer competitive rates for both insured and self-pay patients. You'll always know the cost upfront before your appointment." },
+                        { q: "Does MediCare accept insurance?", a: "Yes, MediCare accepts many major insurance plans. We also offer affordable self-pay options for those without insurance coverage. Check our website or contact our support team for a list of accepted insurance providers." },
                       ].map((item, index) => (
                         <div key={index}>
                           <h3 className="font-semibold mb-2">{item.q}</h3>
@@ -500,8 +509,8 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">About TeleMed</h3>
-              <p className="text-gray-400">Revolutionizing healthcare through innovative telemedicine solutions. Experience the future of medical consultations.</p>
+              <h3 className="text-lg font-semibold mb-4">About MediCare</h3>
+              <p className="text-gray-400">Revolutionizing healthcare through innovative MediCareicine solutions. Experience the future of medical consultations.</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
@@ -542,7 +551,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2024 TeleMed. All rights reserved.</p>
+            <p>&copy; 2024 MediCare. All rights reserved.</p>
           </div>
         </div>
       </footer>
