@@ -8,16 +8,17 @@ import {
   useScroll, 
   useTransform, 
   useSpring, 
-  useMotionValue, // Add this
-  useVelocity,    // And this, if not already imported
-  useAnimationFrame, // And this, if not already imported
-  wrap 
+  useMotionValue, 
+  useVelocity, 
+  useAnimationFrame,
+  wrap // Add wrap here
 } from 'framer-motion';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MessageCircleIcon,  UserIcon, VideoIcon, MenuIcon, XIcon,  StarIcon, SearchIcon, HeartPulseIcon, BrainIcon, EyeIcon, LungsIcon } from 'lucide-react'
+import Home from '@/public/assets/Designer.jpeg'
+import {  MessageCircleIcon, UserIcon, VideoIcon, MenuIcon, XIcon,  StarIcon, SearchIcon, HeartPulseIcon, BrainIcon, EyeIcon } from 'lucide-react'
 
 const MotionLink = motion(Link)
 
@@ -25,7 +26,6 @@ const specialties = [
   { name: "Cardiology", icon: HeartPulseIcon },
   { name: "Neurology", icon: BrainIcon },
   { name: "Ophthalmology", icon: EyeIcon },
-  { name: "Pulmonology", icon: LungsIcon },
   { name: "Dermatology", icon: UserIcon },
   { name: "Psychiatry", icon: MessageCircleIcon },
   { name: "Pediatrics", icon: UserIcon },
@@ -239,7 +239,7 @@ export default function LandingPage() {
                   }}
                 />
                 <Image
-                  src="/placeholder.svg?height=500&width=500"
+                  src={Home}
                   alt="MediCareicine Illustration"
                   width={500}
                   height={500}
@@ -269,7 +269,7 @@ export default function LandingPage() {
         </section>
 
         <section className="py-10 bg-gradient-to-r from-blue-500 to-purple-500 text-white overflow-hidden">
-          <ParallaxText baseVelocity={-5}>Cardiology • Neurology • Ophthalmology • Pulmonology • Dermatology • Psychiatry • Pediatrics • Orthopedics</ParallaxText>
+          <ParallaxText baseVelocity={-5}>Cardiology • Neurology • Ophthalmology • Dermatology • Psychiatry • Pediatrics • Orthopedics</ParallaxText>
           <ParallaxText baseVelocity={5}>24/7 Care • Expert Doctors • Secure Consultations • Prescription Services • Follow-up Care • Health Records</ParallaxText>
         </section>
 
@@ -426,7 +426,7 @@ export default function LandingPage() {
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       {[
-                        { q: "What is MediCare?", a: "MediCare is a cutting-edge MediCareicine platform that connects patients with licensed healthcare providers for virtual consultations, offering a wide range of medical services remotely." },
+                        { q: "What is TeleMed?", a: "MediCare is a cutting-edge MediCareicine platform that connects patients with licensed healthcare providers for virtual consultations, offering a wide range of medical services remotely." },
                         { q: "Is MediCare available 24/7?", a: "Yes, MediCare offers round-the-clock access to healthcare professionals for urgent care needs. For specialized services, availability may vary based on the doctor's schedule." },
                       ].map((item, index) => (
                         <div key={index}>
