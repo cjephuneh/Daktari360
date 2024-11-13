@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex items-center justify-between p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 pt-3">
             <Film className="h-6 w-6" />
-            <span className="text-xl font-bold">Therabot ❤️‍🔥</span>
+            <span className="text-xl font-bold">MediCare</span>
           </Link>
           <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)} className="lg:hidden">
             <Menu className="h-6 w-6" />

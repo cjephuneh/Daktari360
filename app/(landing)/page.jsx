@@ -136,8 +136,8 @@ export default function LandingPage() {
             ))}
           </nav>
           <div className="hidden md:flex space-x-4">
-            <Button variant="outline" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none">Log In</Button>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">Sign Up</Button>
+            <Button variant="outline" href="/dashboard" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none">Doctors</Button>
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white" href="/phamacyOnboarding">Pharmacists</Button>
           </div>
           <Button
             variant="ghost"
@@ -269,8 +269,8 @@ export default function LandingPage() {
         </section>
 
         <section className="py-10 bg-gradient-to-r from-blue-500 to-purple-500 text-white overflow-hidden">
-          <ParallaxText baseVelocity={-5}>Cardiology • Neurology • Ophthalmology • Dermatology • Psychiatry • Pediatrics • Orthopedics</ParallaxText>
-          <ParallaxText baseVelocity={5}>24/7 Care • Expert Doctors • Secure Consultations • Prescription Services • Follow-up Care • Health Records</ParallaxText>
+          <ParallaxText baseVelocity={5} className="px-20">Cardiology • Neurology • Ophthalmology • Dermatology • Psychiatry • Pediatrics • Orthopedics</ParallaxText>
+          <ParallaxText baseVelocity={5} className="text-white" >24/7 Care • Expert Doctors • Secure Consultations • Prescription Services • Follow-up Care • Health Records</ParallaxText>
         </section>
 
         <section id="how-it-works" className="py-20 bg-white">

@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "@/hooks/use-toast"
 import { Loader2, Upload, CheckCircle, PillIcon } from 'lucide-react'
-import Navbar from '@/components/ui/navbar'
-import Footer from '@/components/ui/Footer'
+// import Navbar from '@/components/ui/navbar'
+// import Footer from '@/components/ui/Footer'
 
 const steps = [
   { id: 'personal-info', title: 'Personal Information' },
@@ -36,7 +36,7 @@ export default function PharmacistOnboardingPage() {
   })
   const router = useRouter()
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e ) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
@@ -253,7 +253,7 @@ export default function PharmacistOnboardingPage() {
 
   return (
     <>
-    <Navbar />
+    {/* <Navbar /> */}
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 mt-14">
         <div className="text-center">
@@ -303,7 +303,7 @@ export default function PharmacistOnboardingPage() {
         </motion.form>
       </div>
     </div>
-    <Footer />
+    {/* <Footer /> */}
     </>
   )
 }
