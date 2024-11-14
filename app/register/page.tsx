@@ -8,14 +8,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast } from "@/hooks/use-toast"
 import { EyeIcon, EyeOffIcon, HeartPulseIcon } from 'lucide-react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function RegisterPage() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [fullName, setFullName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -25,34 +27,57 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     if (password !== confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
-        variant: "destructive",
+      toast.error("Passwords don't match. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       })
       setIsLoading(false)
       return
     }
 
     try {
-      // Simulating an API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // For demonstration, we'll just check if all fields are filled
-      if (email && password && fullName) {
-        toast({
-          title: "Registration Successful",
-          description: "Welcome to TeleMed!",
-        })
-        router.push('/dashboard')
-      } else {
-        throw new Error('Please fill in all fields')
+      const userData = {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        role: "Doctor"
       }
+
+      const response = await fetch('https://stallion-holy-informally.ngrok-free.app/api/v1.0/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Registration failed')
+      }
+
+      toast.success('Registration successful! Welcome to TeleMed!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+      router.push('/login')
+      
     } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "Please check your information and try again.",
-        variant: "destructive",
+      toast.error('Registration failed. Please check your information and try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       })
     } finally {
       setIsLoading(false)
@@ -61,6 +86,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 flex items-center justify-center p-4">
+      <ToastContainer />
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -81,12 +107,22 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName">Full Name</Label>
+                  <Label htmlFor="firstName">First Name</Label>
                   <Input
-                    id="fullName"
-                    placeholder="Dr. John Doe"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    id="firstName"
+                    placeholder="John"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    placeholder="Doe"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     required
                   />
                 </div>

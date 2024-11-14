@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription,  CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,21 +11,68 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Badge } from "@/components/ui/badge"
 import { Calendar } from "@/components/ui/calendar"
 import { Video, Plus, Link, Copy } from 'lucide-react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-const upcomingSessions = [
-  { id: 1, patient: "Alice Johnson", date: "2024-07-15", time: "10:00 AM", status: "Scheduled" },
-  { id: 2, patient: "Bob Smith", date: "2024-07-16", time: "2:30 PM", status: "Confirmed" },
-  { id: 3, patient: "Charlie Brown", date: "2024-07-17", time: "11:15 AM", status: "Waiting" },
-  { id: 4, patient: "Diana Ross", date: "2024-07-18", time: "3:45 PM", status: "Scheduled" },
-  { id: 5, patient: "Ethan Hunt", date: "2024-07-19", time: "9:30 AM", status: "Confirmed" },
-]
+interface Appointment {
+  id: number
+  patient_id: number
+  date: string
+  time: string
+  status: string
+  meet_link: string
+  doctor_first_name: string
+}
 
 export default function VideoConferencing() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isNewSessionDialogOpen, setIsNewSessionDialogOpen] = useState(false)
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const token = localStorage.getItem('access_token')
+        const response = await fetch('https://stallion-holy-informally.ngrok-free.app/api/v1.0/appointments/upcoming', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'ngrok-skip-browser-warning': '1',
+            'Content-Type': 'application/json'
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch appointments')
+        }
+
+        const data = await response.json()
+        setAppointments(data.appointments || [])
+      } catch (error) {
+        console.error('Error:', error)
+        toast.error('Failed to load appointments', {
+          position: "top-right",
+          autoClose: 3000,
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchAppointments()
+  }, [])
+
+  const handleCopyMeetLink = (meetLink: string) => {
+    navigator.clipboard.writeText(meetLink)
+    toast.success('Meet link copied to clipboard!', {
+      position: "top-right",
+      autoClose: 2000,
+    })
+  }
 
   return (
     <div className="space-y-6">
+      <ToastContainer />
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Video Conferencing</h1>
         <Dialog open={isNewSessionDialogOpen} onOpenChange={setIsNewSessionDialogOpen}>
@@ -90,37 +137,63 @@ export default function VideoConferencing() {
             <CardDescription>Your scheduled video conferencing sessions</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {upcomingSessions.map((session) => (
-                  <TableRow key={session.id}>
-                    <TableCell className="font-medium">{session.patient}</TableCell>
-                    <TableCell>{session.date}</TableCell>
-                    <TableCell>{session.time}</TableCell>
-                    <TableCell>
-                      <Badge variant={session.status === 'Confirmed' ? 'default' : (session.status === 'Waiting' ? 'secondary' : 'outline')}>
-                        {session.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm">
-                        <Video className="h-4 w-4 mr-2" />
-                        Join
-                      </Button>
-                    </TableCell>
+            {isLoading ? (
+              <div className="text-center py-8">Loading appointments...</div>
+            ) : appointments.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <div className="mb-2">No upcoming sessions scheduled</div>
+                <div className="text-sm">Click "New Session" to schedule a consultation</div>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Patient ID</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Time</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {appointments.map((appointment) => (
+                    <TableRow key={appointment.id}>
+                      <TableCell className="font-medium">Patient #{appointment.patient_id}</TableCell>
+                      <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(`2000-01-01T${appointment.time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={
+                            appointment.status === 'confirmed' ? 'default' : 
+                            appointment.status === 'pending' ? 'secondary' : 
+                            'outline'
+                          }
+                        >
+                          {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => window.open(appointment.meet_link, '_blank')}
+                        >
+                          <Video className="h-4 w-4 mr-2" />
+                          Join
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleCopyMeetLink(appointment.meet_link)}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
         <Card>
