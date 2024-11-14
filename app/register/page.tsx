@@ -10,12 +10,12 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { EyeIcon, EyeOffIcon, HeartPulseIcon } from 'lucide-react'
-// import Navbar from '@/components/ui/navbar'
-// import Footer from '@/components/ui/Footer'
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [fullName, setFullName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -24,25 +24,34 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Here you would typically make an API call to authenticate the user
+    if (password !== confirmPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure your passwords match.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+
     try {
       // Simulating an API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // For demonstration, we'll just check if the email and password are not empty
-      if (email && password) {
+      // For demonstration, we'll just check if all fields are filled
+      if (email && password && fullName) {
         toast({
-          title: "Login Successful",
-          description: "Welcome back to Medicare!",
+          title: "Registration Successful",
+          description: "Welcome to TeleMed!",
         })
         router.push('/dashboard')
       } else {
-        throw new Error('Invalid credentials')
+        throw new Error('Please fill in all fields')
       }
     } catch (error) {
       toast({
-        title: "Login Failed",
-        description: "Please check your email and password and try again.",
+        title: "Registration Failed",
+        description: "Please check your information and try again.",
         variant: "destructive",
       })
     } finally {
@@ -51,11 +60,8 @@ export default function LoginPage() {
   }
 
   return (
-    <>
-    {/* <Navbar /> */}
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 flex items-center justify-center p-4">
       <motion.div
-
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -66,14 +72,24 @@ export default function LoginPage() {
             <div className="flex items-center justify-center mb-4">
               <HeartPulseIcon className="h-12 w-12 text-primary" />
             </div>
-            <CardTitle className="text-2xl text-center">Login to Medicare</CardTitle>
+            <CardTitle className="text-2xl text-center">Create an Account</CardTitle>
             <CardDescription className="text-center">
-              Enter your email and password to access your account
+              Enter your details to create your Medicare account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="fullName">Full Name</Label>
+                  <Input
+                    id="fullName"
+                    placeholder="Dr. John Doe"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -110,29 +126,32 @@ export default function LoginPage() {
                     </Button>
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
               </div>
               <Button className="w-full mt-6" type="submit" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Log in"}
+                {isLoading ? "Creating account..." : "Create account"}
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center text-muted-foreground">
-              <Link href="/forgot-password" className="hover:text-primary">
-                Forgot your password?
-              </Link>
-            </div>
-            <div className="text-sm text-center text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-primary hover:underline">
-                Sign up
+          <CardFooter>
+            <div className="text-sm text-center text-muted-foreground w-full">
+              Already have an account?{" "}
+              <Link href="/login" className="text-primary hover:underline">
+                Log in
               </Link>
             </div>
           </CardFooter>
         </Card>
       </motion.div>
     </div>
-    {/* <Footer /> */}
-    </>
   )
-}
+} 

@@ -136,8 +136,16 @@ export default function LandingPage() {
             ))}
           </nav>
           <div className="hidden md:flex space-x-4">
-            <Button variant="outline" href="/dashboard" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none">Doctors</Button>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white" href="/phamacyOnboarding">Pharmacists</Button>
+            <Link href="/register">
+              <Button variant="outline" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none">
+                Doctors
+              </Button>
+            </Link>
+            <Link href="/pharmacyOnboarding">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                Pharmacists
+              </Button>
+            </Link>
           </div>
           <Button
             variant="ghost"
