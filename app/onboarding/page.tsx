@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 'use client'
 
 import { useState } from 'react'
@@ -9,9 +11,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "@/hooks/use-toast"
-import { Loader2, Upload, CheckCircle } from 'lucide-react'
-import Navbar from '@/components/ui/navbar'
-import Footer from '@/components/ui/Footer'
+import { Upload, CheckCircle } from 'lucide-react'
+// import Navbar from '@/components/ui/navbar'
+// import Footer from '@/components/ui/Footer'
 
 
 const steps = [
@@ -29,13 +31,14 @@ export default function OnboardingPage() {
     firstName: '',
     lastName: '',
     specialization: '',
-    license: null,
-    certification: null,
+    license: null as File | null,
+    certification: null as File | null,
     agreeTos: false,
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target as HTMLInputElement
+    const checked = (e.target as HTMLInputElement).checked
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -186,7 +189,7 @@ export default function OnboardingPage() {
                       Upload License
                     </label>
                   </Button>
-                  {formData.license && <span className="text-sm text-muted-foreground">{formData.license.name}</span>}
+                  {formData.license && <span className="text-sm text-muted-foreground">{(formData.license as File).name}</span>}
                 </div>
               </div>
               <div className="space-y-2">
@@ -212,7 +215,7 @@ export default function OnboardingPage() {
                   id="agreeTos"
                   name="agreeTos"
                   checked={formData.agreeTos}
-                  onCheckedChange={(checked: boolean) => handleInputChange({ target: { name: 'agreeTos', type: 'checkbox', checked } })}
+                  onCheckedChange={(checked: boolean) => handleInputChange({ target: { name: 'agreeTos', type: 'checkbox', checked } } as unknown as React.ChangeEvent<HTMLInputElement>)}
                 />
                 <label
                   htmlFor="agreeTos"
@@ -254,7 +257,6 @@ export default function OnboardingPage() {
 
   return (
     <>
-    <Navbar />
     <div className="min-h-screen bg-gradient-to-b bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
 
@@ -306,7 +308,6 @@ export default function OnboardingPage() {
         </AnimatePresence>
       </div>
     </div>
-    <Footer />
     </>
   )
 }
