@@ -70,7 +70,7 @@ export default function RegisterPage() {
       })
       router.push('/login')
       
-    } catch (error) {
+    } catch {
       toast.error('Registration failed. Please check your information and try again.', {
         position: "top-right",
         autoClose: 3000,
@@ -190,4 +190,4 @@ export default function RegisterPage() {
       </motion.div>
     </div>
   )
-} 
+}
