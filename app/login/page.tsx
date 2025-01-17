@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 
-
 'use client'
 
 import { useState } from 'react'
@@ -43,7 +42,7 @@ export default function LoginPage() {
       } else {
         toast.error(data.message || 'Login failed')
       }
-    } catch (err) {
+    } catch {
       toast.error('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
