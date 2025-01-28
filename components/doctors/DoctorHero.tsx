@@ -3,11 +3,13 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Stethoscope } from "lucide-react"
+import Link from 'next/link';
+
 
 const DoctorHero = () => {
   return (
     <div className="relative overflow-hidden bg-indigo-900 py-20 sm:py-32">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 mt-10">
         <img
           src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80"
           alt="Doctor using digital tablet"
@@ -33,10 +35,16 @@ const DoctorHero = () => {
               cutting-edge telemedicine platform.
             </p>
             <div className="mt-8 sm:mt-12">
-              <Button size="lg" className="group">
+            <Link href="/onboarding">
+            <Button 
+                size="lg" 
+                className="group"
+            >
                 Join Daktari360
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+            </Button>
+            </Link>
+
             </div>
           </motion.div>
           <motion.div
